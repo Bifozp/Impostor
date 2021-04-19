@@ -1,10 +1,32 @@
-﻿namespace Impostor.Api.Innersloth
+﻿using System.Globalization;
+
+namespace Impostor.Api.Innersloth
 {
     public static class TextBox
     {
         public static bool IsCharAllowed(char i)
         {
-            return i == ' ' || (i >= 'A' && i <= 'Z') || (i >= 'a' && i <= 'z') || (i >= '0' && i <= '9') || (i >= 'À' && i <= 'ÿ') || (i >= 'Ѐ' && i <= 'џ') || (i >= 'ㄱ' && i <= 'ㆎ') || (i >= '가' && i <= '힣');
+            switch (char.GetUnicodeCategory(i))
+            {
+                // 英字
+                case UnicodeCategory.LowercaseLetter:
+                case UnicodeCategory.UppercaseLetter:
+                // 数字
+                case UnicodeCategory.DecimalDigitNumber:
+                case UnicodeCategory.LetterNumber:
+                // 文字・修飾子
+                case UnicodeCategory.TitlecaseLetter:
+                case UnicodeCategory.OtherLetter:
+                case UnicodeCategory.ModifierLetter:
+                case UnicodeCategory.OtherSymbol:
+                case UnicodeCategory.ModifierSymbol:
+                case UnicodeCategory.SpaceSeparator:
+                case UnicodeCategory.OtherPunctuation:
+                    return true;
+            }
+
+            System.Console.WriteLine(char.GetUnicodeCategory(i));
+            return false;
         }
     }
 }
